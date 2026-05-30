@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grabber – YouTube to MP3</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<div class="wrap">
+  <header>
+    <div class="logo"><span>G</span>RABBER</div>
+    <p class="sub">Convert &amp; Download YouTube Videos as MP3</p>
+  </header>
+
+  <section class="card">
+
+    <!-- Step 1: Input -->
+    <div class="step" id="s1">
+      <div class="irow">
+        <svg class="yt-ic" viewBox="0 0 24 24">
+          <path d="M23 7s-.3-2-1.2-2.8C20.7 3 19.4 3 18.8 2.9 16.2 2.8 12 2.8 12 2.8s-4.2 0-6.8.1C4.6 3 3.3 3 2.2 4.2 1.3 5 1 7 1 7S.7 9.3.7 11.6v2.1c0 2.3.3 4.6.3 4.6s.3 2 1.2 2.8c1.1 1.2 2.6 1.1 3.3 1.2C7.6 22.4 12 22.4 12 22.4s4.2 0 6.8-.2c.6-.1 1.9-.1 3-1.3.9-.8 1.2-2.8 1.2-2.8s.3-2.3.3-4.6v-2.1C23.3 9.3 23 7 23 7zm-13.5 7.5v-8l8 4-8 4z" fill="#ff0000"/>
+        </svg>
+        <input type="url" id="urlInput" placeholder="Paste YouTube link here…" autocomplete="off" spellcheck="false"/>
+        <button class="btn-cv" id="cvBtn">Convert</button>
+      </div>
+      <p class="hint">Supports youtube.com &amp; youtu.be links</p>
+    </div>
+
+    <!-- Step 2: Loading -->
+    <div class="step hidden" id="s2">
+      <div class="ring"></div>
+      <p class="rtxt" id="loadMsg">Getting MP3 link…</p>
+    </div>
+
+    <!-- Step 3: Result -->
+    <div class="step hidden" id="s3">
+      <div class="rbox">
+        <div class="thumb">
+          <img id="tImg" src="" alt=""/>
+          <span class="mp3tag">MP3</span>
+        </div>
+        <div class="rinfo">
+          <p class="rtitle" id="rTitle">–</p>
+          <p class="rmeta">128 kbps · MP3</p>
+        </div>
+      </div>
+      <button class="dl-btn" id="dlBtn">
+        <svg class="ico" id="ico" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <svg class="spinner" viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="18" fill="none" stroke="white" stroke-width="3.5" stroke-dasharray="80" stroke-dashoffset="60" stroke-linecap="round"/>
+        </svg>
+        <span class="dl-lbl" id="dlLbl">Download<br/>MP3</span>
+      </button>
+      <button class="btn-back" id="backBtn">← Convert another</button>
+    </div>
+
+    <!-- Step 4: Error -->
+    <div class="step hidden" id="s4">
+      <div class="eico">✕</div>
+      <p class="emsg" id="eMsg">Something went wrong.</p>
+      <button class="btn-back" id="errBack">← Try again</button>
+    </div>
+
+  </section>
+
+  <footer><p>Free to use · No sign-up · No redirects</p></footer>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
