@@ -100,9 +100,38 @@ async function doConvert() {
   show('s2');
   $('loadMsg').textContent = 'Getting video info…';
 
-  // Fetch title & thumbnail via YouTube oEmbed (CORS-free, always works)
+  // Fetch title & thumbnail — try highest quality square art first
   let title = 'YouTube Video';
-  let thumb = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+  let thumb = '';
+
+  // Priority order: maxresdefault (1280×720) → sddefault → hqdefault
+  // We'll pick the best available and crop via CSS, but also try
+  // YouTube Music-style square art via the _mqdefault paths
+  const thumbCandidates = [
+    `https://i.ytimg.com/vi_webp/${vid}/maxresdefault.webp`,
+    `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi_webp/${vid}/sddefault.webp`,
+    `https://i.ytimg.com/vi/${vid}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`,
+  ];
+
+  // Pick first URL that doesn't return a placeholder (120×90 = broken)
+  async function getBestThumb() {
+    for (const url of thumbCandidates) {
+      try {
+        const img = new Image();
+        await new Promise((res, rej) => {
+          img.onload = () => res(img);
+          img.onerror = rej;
+          img.src = url;
+        });
+        // YouTube returns a 120×90 grey placeholder for missing resolutions
+        if (img.naturalWidth > 120) return url;
+      } catch {}
+    }
+    return `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
+  }
+
   try {
     const oe = await fetch(
       `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${vid}&format=json`
@@ -110,9 +139,14 @@ async function doConvert() {
     if (oe.ok) {
       const d = await oe.json();
       title = d.title || title;
-      thumb = d.thumbnail_url || thumb;
     }
   } catch {}
+
+  thumb = await getBestThumb();
+
+  // Set blur background (same image, CSS blurs + crops it beautifully)
+  $('artBlur').style.backgroundImage = `url('${thumb}')`;
+
 
   const result = await tryAPIs(vid);
 
@@ -125,6 +159,7 @@ async function doConvert() {
   mp3Title = result.title || title;
 
   $('tImg').src            = thumb;
+  $('artBlur').style.backgroundImage = `url('${thumb}')`;
   $('rTitle').textContent  = result.title || title;
   show('s3');
 }
